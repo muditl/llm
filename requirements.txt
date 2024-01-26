@@ -1,0 +1,13 @@
+PyPDF2
+langchain 
+pathlib 
+torch
+transformers
+sentencepiece
+accelerate
+sentence_transformers
+faiss-cpu
+protobuf
+pytesseract 
+streamlit
+pdf2image
