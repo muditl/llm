@@ -5,6 +5,7 @@ from transformers import AutoTokenizer
 import torch
 import streamlit as st
 
+# reads pdf file
 def pdf_read(pdf):
 
     pdf_reader = PdfReader(pdf)
@@ -16,6 +17,7 @@ def pdf_read(pdf):
     return pdf_text
 
 
+# queries the model to return a summary of the input text
 def summarise(chunks, model):
     
     tokenizer = AutoTokenizer.from_pretrained(model)
@@ -26,19 +28,16 @@ def summarise(chunks, model):
     return summary
 
 
+# makes a streamlit UI and displays summary of user-uploaded files. 
 def main():
     st.set_page_config(page_title="Summarise", page_icon=":book:")
-    
     st.header("Summarizer")
-    
     st.write("PDF/Image")
-    input = st.file_uploader("Upload a file", type=["png", "jpg", "jpeg","pdf"],accept_multiple_files=False)
     
+    input = st.file_uploader("Upload a file", type=["png", "jpg", "jpeg","pdf"],accept_multiple_files=False)
     st.header("Summary")
     
     text = ""
-
-    
     if input is not None:
     
         text = pdf_read(input)
@@ -50,7 +49,6 @@ def main():
         length_function = len)
         chunks = text_splitter.split_text(text)
         print(f"Split {len(text)} text into {len(chunks)} chunks")
-        
         
         model="facebook/bart-large-cnn"
         # model = "mistralai/Mixtral-8x7B-v0.1"
