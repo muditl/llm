@@ -11,8 +11,6 @@ from pathlib import Path
 import streamlit as st
 from transformers import pipeline, AutoTokenizer, BitsAndBytesConfig
 import torch
-from langchain.prompts.prompt import PromptTemplate
-from langchain.chains import ConversationChain
 
 
 def get_file_extension(file_path):
@@ -139,17 +137,12 @@ def get_conversation_chain(vectorstore, model, docs, question):
 
 def main():
     st.set_page_config(page_title="Q/A", page_icon=":book:")
-
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
-
     st.header("Ask your question")
-
     st.write("PDF/Image")
     _input = st.file_uploader("Upload a file", type=["png", "jpg", "jpeg", "pdf"], accept_multiple_files=True)
-
     question = st.text_input("Ask your question")
-
     button = st.button("Process")
 
     # variable is never used
@@ -175,10 +168,10 @@ def main():
 
             if question:
 
-                # model = "psmathur/orca_mini_3b"
+                model = "psmathur/orca_mini_3b"
                 # model = "tiiuae/falcon-7b-instruct"
                 # model = "tiiuae/falcon-40b"
-                model = "mistralai/Mixtral-8x7B-Instruct-v0.1"
+                # model = "mistralai/Mixtral-8x7B-Instruct-v0.1"
 
                 chunks = make_chunks(all_text)
 
