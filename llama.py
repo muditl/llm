@@ -8,7 +8,7 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.bfloat16)
 
 messages=[
-    { 'role': 'user', 'content': "write a quick sort algorithm in python."}
+    {'role': 'user', 'content': "write a quick sort algorithm in python."}
 ]
 inputs = tokenizer.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(model.device)
 
