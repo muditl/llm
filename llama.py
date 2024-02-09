@@ -9,7 +9,7 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.bfloat16)
 
 messages=[
-    {'role': 'user', 'content': """
+    {'role': 'user', 'content': """In the following code finish the function to unsubscribe from all subscriptions:
 from flask import Flask, request, redirect, Blueprint
 import MySQLdb
 
@@ -45,15 +45,7 @@ def unsubscribe_all():
 
 #Database function to delete a user from all subscriptions        
 def unsubscribe_email_from_all_subscriptions(db, email):
-    # BUG: Potential SQL Injection
-    # MESSAGE: This query does can contain user injected commands.
-    # cursor = db.cursor()
-    # cursor.execute("DELETE FROM subscriptions WHERE email = '{}'".format(email))
-    # db.commit()
-    # return
-    
-    # FIXED: 
-    cursor = db.cursor()"""}]
+    """}]
 
 inputs = tokenizer.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(model.device)
 
