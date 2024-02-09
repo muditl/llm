@@ -21,13 +21,13 @@ start = datetime.now()
 outputs = model.generate(
     inputs, 
     max_new_tokens=512, 
-    do_sample=False, 
+    do_sample=True,
     top_k=50, 
     top_p=0.95, 
     num_return_sequences=1, 
     eos_token_id=tokenizer.eos_token_id)
 
 end = datetime.now()
-print("took" + str(end-start) + "to generate response ")
+print("took " + str(end-start) + " to generate response, or "+str((end-start).total_seconds)+" seconds.")
 
 print(tokenizer.decode(outputs[0][len(inputs[0]):], skip_special_tokens=True))
