@@ -8,8 +8,52 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.bfloat16)
 
 messages=[
-    {'role': 'user', 'content': "write a quick sort algorithm in python."} 
-    ]
+    {'role': 'user', 'content': """
+from flask import Flask, request, redirect, Blueprint
+import MySQLdb
+
+bp = Blueprint('email_handling',__name__)
+
+def get_db_connection():
+    db = MySQLdb.connect(host="localhost",
+                         user="python",
+                         passwd="python",
+                         db="db")
+    return db
+
+def create_subscriptions_table(db):
+    cursor = db.cursor()
+    #delete table if it exists
+    cursor.execute("DROP TABLE IF EXISTS subscriptions")
+    
+    cursor.execute(\"""CREATE TABLE subscriptions (
+                            email varchar(255) not null,
+                            channel varchar(255) not null,
+                            PRIMARY KEY (email, channel)
+                            )\""")
+    db.commit()
+
+#URL handler to remove a user from all subscriptions
+@bp.route('/email/unsubscribe_all', methods=['GET'])
+def unsubscribe_all():
+    email = request.args.get('email')
+    db = get_db_connection()
+    unsubscribe_email_from_all_subscriptions(db, email)
+    db.close()
+    return redirect('/')
+
+#Database function to delete a user from all subscriptions        
+def unsubscribe_email_from_all_subscriptions(db, email):
+    # BUG: Potential SQL Injection
+    # MESSAGE: This query does can contain user injected commands.
+    # cursor = db.cursor()
+    # cursor.execute("DELETE FROM subscriptions WHERE email = '{}'".format(email))
+    # db.commit()
+    # return
+    
+    # FIXED: 
+    cursor = db.cursor()"""}]
+
 inputs = tokenizer.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(model.device)
 
 # tokenizer.eos_token_id is the id of <|EOT|> token
@@ -21,4 +65,4 @@ outputs = model.generate(
     top_p=0.95, 
     num_return_sequences=1, 
     eos_token_id=tokenizer.eos_token_id)
-print(tokenizer.decode(outputs[0][len(inputs[0]):], skip_special_tokens=True))a
+print(tokenizer.decode(outputs[0][len(inputs[0]):], skip_special_tokens=True))
