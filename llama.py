@@ -60,6 +60,6 @@ outputs = model.generate(
     eos_token_id=tokenizer.eos_token_id)
 
 end = datetime.now()
-print("took " + str(end-start) + " to generate response, or "+str((end-start).total_seconds)+" seconds.")
+print("took " + str(end-start) + " to generate response, or "+str((end-start).total_seconds())+" seconds.")
 
 print(tokenizer.decode(outputs[0][len(inputs[0]):], skip_special_tokens=True))
