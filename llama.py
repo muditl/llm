@@ -9,9 +9,41 @@ model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.bfloat16)
 
 messages=[
-    {'role': 'user', 'content': """ Finish the following C code to multiply 2 doubles and return them in string form.
-    char* multiply_doubles_str (double d1, double d2){
-        }"""}]
+    {'role': 'user', 'content': """In the following code finish the function to unsubscribe from all subscriptions:
+from flask import Flask, request, redirect, Blueprint
+import MySQLdb
+
+bp = Blueprint('email_handling',__name__)
+def get_db_connection():
+    db = MySQLdb.connect(host="localhost",
+                         user="python",
+                         passwd="python",
+                         db="db")
+    return db
+    
+def create_subscriptions_table(db):
+    cursor = db.cursor()
+    #delete table if it exists
+    cursor.execute("DROP TABLE IF EXISTS subscriptions")
+    
+    cursor.execute(\"""CREATE TABLE subscriptions (
+                            email varchar(255) not null,
+                            channel varchar(255) not null,
+                            PRIMARY KEY (email, channel)
+                            )\""")
+    db.commit()
+    
+#URL handler to remove a user from all subscriptions
+@bp.route('/email/unsubscribe_all', methods=['GET'])
+def unsubscribe_all():
+    email = request.args.get('email')
+    db = get_db_connection()
+    unsubscribe_email_from_all_subscriptions(db, email)
+    db.close()
+    return redirect('/')
+    
+#Database function to delete a user from all subscriptions        
+def unsubscribe_email_from_all_subscriptions(db, email): """}]
 
 inputs = tokenizer.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(model.device)
 
