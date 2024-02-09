@@ -1,5 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+from datetime import datetime
 
 tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-1.3b-instruct", trust_remote_code=True)
 model = AutoModelForCausalLM.from_pretrained(
@@ -56,6 +57,8 @@ def unsubscribe_email_from_all_subscriptions(db, email):
 
 inputs = tokenizer.apply_chat_template(messages, add_generation_prompt=True, return_tensors="pt").to(model.device)
 
+start = datetime.now()
+
 # tokenizer.eos_token_id is the id of <|EOT|> token
 outputs = model.generate(
     inputs, 
@@ -65,4 +68,8 @@ outputs = model.generate(
     top_p=0.95, 
     num_return_sequences=1, 
     eos_token_id=tokenizer.eos_token_id)
+
+end = datetime.now()
+print("took" + str(end-start) + "to generate response ")
+
 print(tokenizer.decode(outputs[0][len(inputs[0]):], skip_special_tokens=True))
