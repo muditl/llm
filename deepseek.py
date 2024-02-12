@@ -2,9 +2,9 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 from datetime import datetime
 
-tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-1.3b-instruct", trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-7b-instruct", trust_remote_code=True)
 model = AutoModelForCausalLM.from_pretrained(
-    "deepseek-ai/deepseek-coder-1.3b-instruct", 
+    "deepseek-ai/deepseek-coder-7b-instruct", 
     trust_remote_code=True, 
     torch_dtype=torch.bfloat16)
 
