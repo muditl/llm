@@ -13,7 +13,8 @@ tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-7b-instruc
 model = AutoModelForCausalLM.from_pretrained(
     "deepseek-ai/deepseek-coder-7b-instruct", 
     trust_remote_code=True, 
-    torch_dtype=torch.bfloat16)
+    torch_dtype=torch.bfloat16,
+    quantization_config=bnb_config)
 
 messages=[
     {'role': 'user', 'content': """In the following code finish the function to unsubscribe from all subscriptions:
